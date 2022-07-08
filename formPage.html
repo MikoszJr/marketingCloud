@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSJS Form</title>
+    <style>.hidden { display: none; }</style>
+</head>
+<body>
+    <form action="https://mc-domain.com/form-handler" method="post">
+        <fieldset>
+            <legend>Form</legend>
+            <label for="EmailAddress">Email*:</label>
+            <input type="email" name="EmailAddress" id="email" placeholder="ex: john.smith@mail.com"
+                required>
+            <br><br>
+            <button>Subscribe</button>
+        </fieldset>
+        <fieldset class="ok hidden">
+            <legend>Message</legend>
+            Thank you for subscribing :)
+            <br><br>
+            <button onclick="document.location.reload()">Retry</button>
+        </fieldset>
+        <fieldset class="error hidden">
+            <legend>Message</legend>
+            Something went wrong :(
+            <br><br>
+            <button onclick="document.location.reload()">Retry</button>
+        </fieldset>
+    </form>
+    <script src="js/form.js"></script>
+</body>
+</html>

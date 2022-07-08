@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Untitled Document</title>
+</head>
+
+<body>
+	
+	<script runat="server">
+
+    Platform.Load('core', '1.1.1');
+
+    var proxy = new Script.Util.WSProxy();
+
+    try {
+
+        var data = Platform.Request.GetPostData();
+
+        var parsed = Platform.Function.ParseJSON(data);
+
+        var req = proxy.createItem('DataExtensionObject', {
+            Name: "Emails",
+            Properties: formatProps(parsed)
+        });
+
+        var res = req.Results[0],
+            message = "";
+
+        if(req.Status != 'OK') {
+            message = res.ErrorMessage;
+        } else {
+            message = res.StatusMessage;
+        }
+
+        Write(Stringify({ Status: req.Status, Message: message }));
+
+    } catch(err) {
+
+        Write(Stringify({ Status: 'Error', Message: err }));
+
+    }
+
+    function formatProps(data) {
+        var arr = [];
+        for (k in data) {
+            arr.push({
+                Name: k,
+                Value: data[k]
+            });
+        }
+        return arr;
+    }
+
+</script>
+	
+	
+</body>
+</html>
