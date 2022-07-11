@@ -29,10 +29,6 @@ function postFormData(e) {
             console.info(data.Message);
         }
         toggleMessage(data.Status);
-    })
-    .catch(function (error) {
-        console.error(error);
-        toggleMessage('Error');
     });
 
 }
