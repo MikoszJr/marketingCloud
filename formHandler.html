@@ -6,54 +6,32 @@
 </head>
 
 <body>
-	
 	<script runat="server">
 
-    Platform.Load('core', '1.1.1');
+    Platform.Load("core", "1.1.1");
 
-    var proxy = new Script.Util.WSProxy();
+    var referer = String(Platform.Request.ReferrerURL).split("?")[0];
 
     try {
+      
+      </script>%%[
+      
+        SET @EmailAddress = RequestParameter("EmailAddress")
+        InsertData("Foundation_API_Test", "EmailAddress", @EmailAddress)
+          
+      ]%%<script runat="server">
+        
+    } catch (err) {
 
-        var data = Platform.Request.GetPostData();
+      referer += "?error=1&message=" + Stringify(err.message) + Stringify(err.description);
+      Platform.Response.Redirect(referer);
 
-        var parsed = Platform.Function.ParseJSON(data);
+    } finally {
 
-        var req = proxy.createItem('DataExtensionObject', {
-            Name: "Foundation_API_Test",
-            Properties: formatProps(parsed)
-        });
-
-        var res = req.Results[0],
-            message = "";
-
-        if(req.Status != 'OK') {
-            message = res.ErrorMessage;
-        } else {
-            message = res.StatusMessage;
-        }
-
-        Write(Stringify({ Status: req.Status, Message: message }));
-
-    } catch(err) {
-
-        Write(Stringify({ Status: 'Error', Message: err }));
-
+      Platform.Response.Redirect(referer + "?ok=1");
+      
     }
-
-    function formatProps(data) {
-        var arr = [];
-        for (k in data) {
-            arr.push({
-                Name: k,
-                Value: data[k]
-            });
-        }
-        return arr;
-    }
-
-</script>
-	
+	</script>	
 	
 </body>
 </html>

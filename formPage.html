@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSJS Form</title>
-    <style>.hidden { display: none; }</style>
+    <title>Hybrid Form</title>
 </head>
 <body>
+    %%[
+        SET @ok = RequestParameter("ok")
+        SET @error = RequestParameter("error")
+        SET @message = RequestParameter("message")
+    ]%%
     <form action="https://pages.transamerica.com/formHandler" method="post">
+        %%[ IF EMPTY(@ok) AND EMPTY(@error) THEN ]%%
         <fieldset>
             <legend>Form</legend>
             <label for="EmailAddress">Email*:</label>
@@ -16,19 +21,25 @@
             <br><br>
             <button>Subscribe</button>
         </fieldset>
-        <fieldset class="ok hidden">
-            <legend>Message</legend>
-            Thank you for subscribing :)
-            <br><br>
-            <button onclick="document.location.reload()">Retry</button>
-        </fieldset>
-        <fieldset class="error hidden">
-            <legend>Message</legend>
-            Something went wrong :(
-            <br><br>
-            <button onclick="document.location.reload()">Retry</button>
-        </fieldset>
+        %%[ ELSE ]%%
+            %%[ IF NOT EMPTY(@ok) THEN ]%%
+            <fieldset>
+                <legend>Message</legend>
+                Thank you for subscribing :)
+            </fieldset>
+            %%[ ENDIF ]%%
+            %%[ IF NOT EMPTY(@error) THEN ]%%
+            <fieldset>
+                <legend>Message</legend>
+                Something went wrong :(
+            </fieldset>
+            %%[ ENDIF ]%%
+        %%[ ENDIF ]%%
     </form>
-    <script src="https://pages.transamerica.com/form.js"></script>
+    %%[ IF NOT EMPTY(@message) AND NOT EMPTY(@error) THEN ]%%
+    <script>
+        console.error(`%%=v(@message)=%%`);
+    </script>
+    %%[ ENDIF ]%%
 </body>
 </html>
