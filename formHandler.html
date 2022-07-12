@@ -9,10 +9,7 @@
       </script>%%[
       
         SET @EmailAddress = RequestParameter("EmailAddress")
-        InsertData("Foundation_API_Test", "EmailAddress", @EmailAddress)
-
-		SET @SubscriberKey = RequestParameter("EmailAddress")
-		InsertData("Foundation_API_Test", "SubscriberKey", @SubscriberKey)
+        InsertData("Emails", "EmailAddress", @EmailAddress)
           
       ]%%<script runat="server">
         
