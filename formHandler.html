@@ -9,7 +9,10 @@
       </script>%%[
       
         SET @EmailAddress = RequestParameter("EmailAddress")
-        InsertData("Emails", "EmailAddress", @EmailAddress)
+        InsertData("Foundation_DE_1", "EmailAddress", @EmailAddress)
+
+		SET @IsEngaged = RequestParameter("IsEngaged")
+        InsertData("Foundation_DE_1", "IsEngaged", @IsEngaged)
           
       ]%%<script runat="server">
         
