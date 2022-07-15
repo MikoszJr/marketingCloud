@@ -1,214 +1,48 @@
-<script type="text/javascript" runat="server">
-
-    // src: https://gist.github.com/wvpv/19777e1167d6ac91e2e8
-    // demo: https://pub.s7.exacttarget.com/yo3hzpktgmu?qs=7145718410d87e2af4e5001112e1de43e2e457b69041ac21&mid=7203368
-
-    Platform.Load("core", "1");
-
-    var debug = true;
-    var request = {};
-
-    SetVar("method", Request.Method)
-    SetVar("urlThis", Platform.Request.RequestURL);
-    SetVar("MasterDEKey", "ExampleMaster");
-    SetVar("debug", debug);
-
-    if (request.method == "GET") {
-
-        if (debug) {
-            Write("GET<br>");
-        }
-
-        // retrieve the subscriberkey via system personalization string from the send context
-        SetVar("SubscriberKey", Attribute.GetValue("_SubscriberKey"));
-
-        if (request.SubscriberKey != "") {
-
-          // retrieve the row from the Master DE
-          var masterRows = Platform.Function.LookupRows(request.MasterDEKey,['SubscriberKey'], [request.SubscriberKey]);
-
-          if (debug) {
-            Write("<br>masterRows.length: " + masterRows.length);
-            Write("<br>masterRows: " + Stringify(masterRows));
-          }
-
-          // set variables for the Master column values (for defaulting below)
-          if (typeof masterRows !== 'undefined' &&  masterRows.length > 0) {
-
-            // DE field names are case-sensitive
-            SetVar("SubscriberKey", masterRows[0]["SubscriberKey"]);
-            SetVar("EmailAddress", masterRows[0]["EmailAddress"]);
-            SetVar("FirstName", masterRows[0]["FirstName"]);
-            SetVar("LastName", masterRows[0]["LastName"]);
-            SetVar("ZipCode", masterRows[0]["ZipCode"]);
-
-          }
-
-        }
-
-    } else if (request.method == "POST") {
-
-        if (debug) {
-            Write("POST<br>");
-        }
-
-        // get form field values
-        SetVar("SubscriberKey", Request.GetFormField("SubscriberKey"));
-
-        // if the SubscriberKey is blank then fall back and use the email address
-        if (request.SubscriberKey == "") {
-            SetVar("SubscriberKey", Request.GetFormField("EmailAddress"));
-        }
-
-        // retrieve values from the form submission
-        // form field names are case-sensitive
-        SetVar("EmailAddress", Request.GetFormField("EmailAddress"));
-        SetVar("FirstName", Request.GetFormField("FirstName"));
-        SetVar("LastName", Request.GetFormField("LastName"));
-        SetVar("ZipCode", Request.GetFormField("ZipCode"));
-
-        if (request.SubscriberKey != "") {
-
-          try {
-
-              // set values for Subscriber update
-              var sub = {
-                     "SubscriberKey": request.SubscriberKey
-                   , "EmailAddress": request.EmailAddress
-                   , "Status" : "Active"
-              };
-
-              // initialize the Subscriber object
-              var subObj = Subscriber.Init(request.SubscriberKey);
-
-              // add/update the Subscriber
-              SetVar("subscriberUpsertResults", subObj.Upsert(sub));
-
-              // upsert a row in the Master Data Extension
-              var de = DataExtension.Init(request.MasterDEKey);
-
-              var row = {};
-              row.EmailAddress = request.EmailAddress;
-              row.SubscriberKey = request.SubscriberKey;
-              row.FirstName = request.FirstName;
-              row.LastName = request.LastName;
-              row.ZipCode = request.ZipCode;
-
-              if (debug) {
-                Write("<br><br>DE row: " + Stringify(row));
-              }
-
-              try {
-
-                // attempt to add a row
-                SetVar("rowAddResults", de.Rows.Add(row));
-
-              } catch (e1) {
-
-                 if (debug) {
-                   Write("<br><br>Exception (1): " + e1);
-                 }
-
-                 try {
-
-                    SetVar("rowUpdateResults", de.Rows.Update(row, ['SubscriberKey'], [request.SubscriberKey]));
-
-                 } catch (e2) {
-
-                    if (debug) {
-                     Write("<br><br>Exception (2): " + e2 + " " + Stringify(request));
-                    }
-
-                 }
-              }
-
-              SetVar("overallResult", "success");
-
-          } catch(e3) {
-
-              SetVar("overallResult", "error");
-
-          }
-
-        } // EmailAddress check
-
-    } // POST
-
-    // sets JS and AMPScript variables
-    function SetVar(varName, varValue){
-        request[varName] = varValue;
-        Variable.SetValue(varName, varValue);
-    }
-
-    if (debug) {
-        Write("<br><br>" + Stringify(request) + "<br><br>");
-    }
-
-</script><!DOCTYPE HTML>
-<html>
-    <head>
-    <style>
-      body {
-        font-family: sans-serif;
-        font-size:13px;
-      }
-      label {
-        display:block;
-        padding-top:10px;
-      }
-      input[type="text"] {
-        display:block;
-
-      }
-      fieldset {
-        border: 0;
-        padding:0;
-        margin:0;
-      }
-    </style>
-    </head>
-    <body>
-
-      %%[ if @method == "GET" then ]%%
-
-        <form id="form1" action="%%=v(@urlThis)=%%" method="post" enctype="application/x-www-form-urlencoded">
-         <fieldset>
-          <input type="hidden" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
-
-          <label for="Email Address">Email Address</label>
-          <input type="text" name="EmailAddress" value="%%=v(@EmailAddress)=%%">
-
-          <label for="First Name">First Name</label>
-          <input type="text" name="FirstName" value="%%=v(@FirstName)=%%">
-
-          <label for="Last Name">Last Name</label>
-          <input type="text" name="LastName" value="%%=v(@LastName)=%%">
-
-          <label for="ZipCode">Zip Code</label>
-          <input type="text" name="ZipCode" value="%%=v(@ZipCode)=%%">
-
-         </fieldset>
-
-         <p><button type="submit">Submit</button></p>
-
-        </form>
-
-      %%[ elseif @method == "POST" then ]%%
-
-        %%[ if @overallResult == "success" then ]%%
-
-          <h1>Thanks</h1>
-          We got your updates.
-
-        %%[ elseif @overallResult == "error" then ]%%
-
-          <h1>Oops!</h1>
-          We had some trouble.
-
-        %%[ endif ]%%
-
-
-      %%[ endif ]%%
-
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Form</title>
+</head>
+<body>
+    %%[
+        SET @ok = RequestParameter("ok")
+        SET @error = RequestParameter("error")
+        SET @message = RequestParameter("message")
+    ]%%
+    <form action="https://pages.transamerica.com/formHandler" method="post">
+        %%[ IF EMPTY(@ok) AND EMPTY(@error) THEN ]%%
+        <fieldset>
+            <legend>Form</legend>
+            <label for="EmailAddress">Email*:</label>
+            <input type="email" name="EmailAddress" id="email" placeholder="ex: john.smith@mail.com"
+                required>
+            <br><br>
+			<label for="IsEngaged">More information:</label>
+			<input type="checkbox" name="IsEngaged" id="checkbox" value="True" checked>
+            <br><br>
+            <button>Subscribe</button>
+        </fieldset>
+        %%[ ELSE ]%%
+            %%[ IF NOT EMPTY(@ok) THEN ]%%
+            <fieldset>
+                <legend>Message</legend>
+                Thank you for subscribing :)
+            </fieldset>
+            %%[ ENDIF ]%%
+            %%[ IF NOT EMPTY(@error) THEN ]%%
+            <fieldset>
+                <legend>Message</legend>
+                Something went wrong :(
+            </fieldset>
+            %%[ ENDIF ]%%
+        %%[ ENDIF ]%%
+    </form>
+    %%[ IF NOT EMPTY(@message) AND NOT EMPTY(@error) THEN ]%%
+    <script>
+        console.error(`%%=v(@message)=%%`);
+    </script>
+    %%[ ENDIF ]%%
+</body>
 </html>
