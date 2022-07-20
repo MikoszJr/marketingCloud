@@ -7,7 +7,7 @@
 
     Platform.Load("core", "1");
 
-    var debug = true;
+    var debug = false;
     var request = {};
 
     SetVar("method", Request.Method)
@@ -143,7 +143,7 @@
     }
 
     if (debug) {
-        Write("<div class='row'>" + Stringify(request) + "</div>");
+        Write("<br>" + Stringify(request) + "<br>");
     }
 
 </script>
