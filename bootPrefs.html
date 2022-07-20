@@ -1,0 +1,286 @@
+<!-- // Preference script for DE post to Salesforce Marketing Cloud -->
+
+<script type="text/javascript" runat="server">
+
+    // src: https://gist.github.com/wvpv/19777e1167d6ac91e2e8
+    // demo: https://pub.s7.exacttarget.com/yo3hzpktgmu?qs=7145718410d87e2af4e5001112e1de43e2e457b69041ac21&mid=7203368
+
+    Platform.Load("core", "1");
+
+    var debug = true;
+    var request = {};
+
+    SetVar("method", Request.Method)
+    SetVar("urlThis", Platform.Request.RequestURL);
+    SetVar("MasterDEKey", "AF5A032F-DF27-41FD-BE52-2EF169CEAFBB");
+    SetVar("debug", debug);
+
+    if (request.method == "GET") {
+
+        if (debug) {
+            Write("GET<br>");
+        }
+
+        // retrieve the subscriberkey via system personalization string from the send context
+        SetVar("SubscriberKey", Attribute.GetValue("_SubscriberKey"));
+
+        if (request.SubscriberKey != "") {
+
+          // retrieve the row from the Master DE
+          var masterRows = Platform.Function.LookupRows(request.MasterDEKey,['SubscriberKey'], [request.SubscriberKey]);
+
+          if (debug) {
+            Write("<br>masterRows.length: " + masterRows.length);
+            Write("<br>masterRows: " + Stringify(masterRows));
+          }
+
+          // set variables for the Master column values (for defaulting below)
+          if (typeof masterRows !== 'undefined' &&  masterRows.length > 0) {
+
+            // DE field names are case-sensitive
+            SetVar("SubscriberKey", masterRows[0]["SubscriberKey"]);
+            SetVar("EmailAddress", masterRows[0]["EmailAddress"]);
+            SetVar("FirstName", masterRows[0]["FirstName"]);
+            SetVar("LastName", masterRows[0]["LastName"]);
+            SetVar("ZipCode", masterRows[0]["ZipCode"]);
+
+          }
+
+        }
+
+    } else if (request.method == "POST") {
+
+        if (debug) {
+            Write("POST<br>");
+        }
+
+        // get form field values
+        SetVar("SubscriberKey", Request.GetFormField("SubscriberKey"));
+
+        // if the SubscriberKey is blank then fall back and use the email address
+        if (request.SubscriberKey == "") {
+            SetVar("SubscriberKey", Request.GetFormField("EmailAddress"));
+        }
+
+        // retrieve values from the form submission
+        // form field names are case-sensitive
+        SetVar("EmailAddress", Request.GetFormField("EmailAddress"));
+        SetVar("FirstName", Request.GetFormField("FirstName"));
+        SetVar("LastName", Request.GetFormField("LastName"));
+        SetVar("ZipCode", Request.GetFormField("ZipCode"));
+
+        if (request.SubscriberKey != "") {
+
+          try {
+
+              // set values for Subscriber update
+              var sub = {
+                     "SubscriberKey": request.SubscriberKey
+                   , "EmailAddress": request.EmailAddress
+                   , "Status" : "Active"
+              };
+
+              // initialize the Subscriber object
+              var subObj = Subscriber.Init(request.SubscriberKey);
+
+              // add/update the Subscriber
+              SetVar("subscriberUpsertResults", subObj.Upsert(sub));
+
+              // upsert a row in the Master Data Extension
+              var de = DataExtension.Init(request.MasterDEKey);
+
+              var row = {};
+              row.EmailAddress = request.EmailAddress;
+              row.SubscriberKey = request.SubscriberKey;
+              row.FirstName = request.FirstName;
+              row.LastName = request.LastName;
+              row.ZipCode = request.ZipCode;
+
+              if (debug) {
+                Write("<br><br>DE row: " + Stringify(row));
+              }
+
+              try {
+
+                // attempt to add a row
+                SetVar("rowAddResults", de.Rows.Add(row));
+
+              } catch (e1) {
+
+                 if (debug) {
+                   Write("<br><br>Exception (1): " + e1);
+                 }
+
+                 try {
+
+                    SetVar("rowUpdateResults", de.Rows.Update(row, ['SubscriberKey'], [request.SubscriberKey]));
+
+                 } catch (e2) {
+
+                    if (debug) {
+                     Write("<br><br>Exception (2): " + e2 + " " + Stringify(request));
+                    }
+
+                 }
+              }
+
+              SetVar("overallResult", "success");
+
+          } catch(e3) {
+
+              SetVar("overallResult", "error");
+
+          }
+
+        } // EmailAddress check
+
+    } // POST
+
+    // sets JS and AMPScript variables
+    function SetVar(varName, varValue){
+        request[varName] = varValue;
+        Variable.SetValue(varName, varValue);
+    }
+
+    if (debug) {
+        Write("<br><br>" + Stringify(request) + "<br><br>");
+    }
+
+</script>
+
+<!-- // END -->
+
+<!-- // Begin HTML page layout -->
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="Michael Mikosz">
+	<meta name="generator" content="Hugo 0.84.0">
+
+	<title>Salesforce Marketing Cloud - Preference Template</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+
+	<style>
+		.bd-placeholder-img {
+		font-size: 1.125rem;
+		text-anchor: middle;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
+		}
+
+		@media (min-width: 768px) {
+		.bd-placeholder-img-lg {
+		  font-size: 3.5rem;
+		}
+		}
+		html,
+		body {
+		  height: 100%;
+		}
+
+		body {
+		  display: flex;
+		  align-items: center;
+		  padding-top: 40px;
+		  padding-bottom: 40px;
+		  background-color: #f5f5f5;
+		}
+
+		.form-signin {
+		  width: 100%;
+		  max-width: 330px;
+		  padding: 15px;
+		  margin: auto;
+		}
+
+		.form-signin .checkbox {
+		  font-weight: 400;
+		}
+
+		.form-signin .form-floating:focus-within {
+		  z-index: 2;
+		}
+
+		.form-signin input[type="email"] {
+		  margin-bottom: -1px;
+		  border-bottom-right-radius: 0;
+		  border-bottom-left-radius: 0;
+		}
+
+		.form-signin input[type="password"] {
+		  margin-bottom: 10px;
+		  border-top-left-radius: 0;
+		  border-top-right-radius: 0;
+		}
+	</style>
+</head>
+	
+<body class="text-center">
+
+	<main class="form-signin">
+		<img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+		<h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+		%%[ if @method == "GET" then ]%%
+
+		<form id="prefCenter" action="%%=v(@urlThis)=%%" method="post" enctype="application/x-www-form-urlencoded">
+			<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
+			<div class="form-floating">
+				<input type="email" class="form-control" name="EmailAddress" value="%%=v(@EmailAddress)=%%">
+				<label for="Email Address">Email Address</label>
+			</div>
+
+			<div class="form-floating">
+				<input type="text" class="form-control" name="FirstName" value="%%=v(@FirstName)=%%">
+				<label for="First Name">First Name</label>
+			</div>
+
+			<div class="form-floating">
+				<input type="text" class="form-control" name="LastName" value="%%=v(@LastName)=%%">
+				<label for="Last Name">Last Name</label>
+			</div>
+
+			<div class="form-floating">
+				<input type="text" class="form-control" name="ZipCode" value="%%=v(@ZipCode)=%%">
+				<label for="ZipCode">Zip Code</label>
+			</div>
+			<div class="checkbox mb-3">
+				<label>
+					<input type="checkbox" value="remember-me"> Remember me
+			  </label>
+			</div>
+			<button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+		</form>
+
+		%%[ elseif @method == "POST" then ]%%
+
+		%%[ if @overallResult == "success" then ]%%
+
+		  <h1>Thanks</h1>
+		  We got your updates.
+
+		%%[ elseif @overallResult == "error" then ]%%
+
+		  <h1>Oops!</h1>
+		  We had some trouble.
+
+		%%[ endif ]%%
+
+
+		%%[ endif ]%%
+	</main>
+
+	<!-- Bootstrap core JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+<!-- END -->
