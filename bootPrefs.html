@@ -238,19 +238,7 @@
 		SET @IsEngaged = "True"
 		]%%
 		
-		<script>
-			$(document).ready(function() {
-
-				// Set initial state
-				$('#IsEngaged').val($(this).is(':checked'));
-
-				// It gets checked to false as uncheck
-				// is the default
-				$('#IsEngaged').click(function() {
-					$('#IsEngaged').val($(this).is(':checked'));
-				});
-			});
-    	</script>
+		
 
 		<form id="prefCenter" action="%%=v(@urlThis)=%%" method="post" enctype="application/x-www-form-urlencoded">
 			<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
