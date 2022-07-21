@@ -43,6 +43,7 @@
             SetVar("FirstName", masterRows[0]["FirstName"]);
             SetVar("LastName", masterRows[0]["LastName"]);
             SetVar("ZipCode", masterRows[0]["ZipCode"]);
+			SetVar("IsEngaged"), masterRows[0]["IsEngaged"]);
 
           }
 
@@ -68,6 +69,7 @@
         SetVar("FirstName", Request.GetFormField("FirstName"));
         SetVar("LastName", Request.GetFormField("LastName"));
         SetVar("ZipCode", Request.GetFormField("ZipCode"));
+		SetVar("IsEngaged"), Request.GetFormField("IsEngaged"));
 
         if (request.SubscriberKey != "") {
 
@@ -95,6 +97,7 @@
               row.FirstName = request.FirstName;
               row.LastName = request.LastName;
               row.ZipCode = request.ZipCode;
+			  row.IsEngaged = request.IsEngaged;
 
               if (debug) {
                 Write("<br><br>DE row: " + Stringify(row));
@@ -252,7 +255,7 @@
 			</div>
 			<div class="checkbox mb-3">
 				<label>
-					<input type="checkbox" value="remember-me"> Remember me
+					<input type="checkbox" value="%%=v(@IsEngaged)=%%"> Sign Up
 			  </label>
 			</div>
 			<button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
