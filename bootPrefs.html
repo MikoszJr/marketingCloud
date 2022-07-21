@@ -231,6 +231,20 @@
 		<h1 class="h3 mb-3 fw-normal">Please Sign Up Below</h1>
 
 		%%[ if @method == "GET" then ]%%
+		
+		<script>
+			$('#checkbox-value').text($('#IsEngaged').val());
+
+			$("#IsEngaged").on('change', function() {
+			  if ($(this).is(':checked')) {
+				$(this).attr('value', 'true');
+			  } else {
+				$(this).attr('value', 'false');
+			  }
+
+			  $('#checkbox-value').text($('#IsEngaged').val());
+			});
+		</script>
 
 		<form id="prefCenter" action="%%=v(@urlThis)=%%" method="post" enctype="application/x-www-form-urlencoded">
 			<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
@@ -255,9 +269,10 @@
 			</div>
 			<div class="checkbox mb-3">
 				<label>
-					<input type="checkbox" name="IsEngaged" value="%%=v(@IsEngaged)=%%" checked> Sign Up
+					<input type="checkbox" id="IsEngaged" name="IsEngaged" value="%%=v(@IsEngaged)=%%" checked> Sign Up
 			  </label>
 			</div>
+			<div id="checkbox-value"></div>
 			<button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
 		</form>
 
@@ -281,6 +296,8 @@
 
 	<!-- Bootstrap core JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	
 </body>
 </html>
