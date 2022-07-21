@@ -238,12 +238,12 @@
 			$(document).ready(function() {
 
 				// Set initial state
-				$('#IsEngaged').val($(this).is('checked'));
+				$('#IsEngaged').val($(this).is(':checked'));
 
 				// It gets checked to false as uncheck
 				// is the default
 				$('#IsEngaged').click(function() {
-					$('#IsEngaged').val($(this).is('checked'));
+					$('#IsEngaged').val($(this).is(':checked'));
 				});
 			});
     	</script>
@@ -271,7 +271,7 @@
 			</div>
 			<div class="checkbox mb-3">
 				<label>
-					<input type="checkbox" id="IsEngaged" name="IsEngaged" value="true" checked> Sign Up
+					<input type="checkbox" id="IsEngaged" name="IsEngaged" value="true" checked="checked"> Sign Up
 			  	</label>
 			</div>
 			<button id="submit" class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
