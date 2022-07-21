@@ -233,17 +233,15 @@
 		%%[ if @method == "GET" then ]%%
 		
 		<script>
-			$('#checkbox-value').text($('#IsEngaged').val());
-
-			$("#IsEngaged").on('change', function() {
-			  if ($(this).is(':checked')) {
-				$(this).attr('value', 'true');
-			  } else {
-				$(this).attr('value', 'false');
-			  }
-
-			  $('#checkbox-value').text($('#IsEngaged').val());
-			});
+			document.getElementById('submit').onclick = function() {
+				var checkboxes = document.getElementsByName('IsEngaged');
+				for (var checkbox of checkboxes)
+				{
+					if (checkbox.checked) {
+						document.body.append(checkbox.value + 'True');
+					}
+				}
+			}
 		</script>
 
 		<form id="prefCenter" action="%%=v(@urlThis)=%%" method="post" enctype="application/x-www-form-urlencoded">
@@ -269,11 +267,11 @@
 			</div>
 			<div class="checkbox mb-3">
 				<label>
-					<input type="checkbox" id="IsEngaged" name="IsEngaged" value="%%=v(@IsEngaged)=%%" checked> Sign Up
+					<input type="checkbox" id="IsEngaged" name="IsEngaged" checked> Sign Up
 			  </label>
 			</div>
 			<div id="checkbox-value"></div>
-			<button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+			<button id="submit" class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
 		</form>
 
 		%%[ elseif @method == "POST" then ]%%
