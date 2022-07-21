@@ -232,8 +232,10 @@
 	<main class="form-signin">
 		<h1 class="h3 mb-3 fw-normal">Please Sign Up Below</h1>
 
-		%%[ if @method == "GET" then 
+		%%[ if @method == "GET" then ]%%
 			
+			
+		%%[	
 			<!-- // Set AMPScript variables -->
 			SET @IsEngaged = "true"
 		
@@ -243,7 +245,6 @@
 			SET @EmailAddress = RequestParameter('EmailAddress')
 			SET @ZipCode = RequestParameter('ZipCode')
 			SET @SubscriberKey = RequestParameter('SubscriberKey')
-		
 		]%%
 		
 		<!-- State change for subscriptions checkbox -->
