@@ -23,6 +23,9 @@
 
         // retrieve the subscriberkey via system personalization string from the send context
         SetVar("SubscriberKey", Attribute.GetValue("_SubscriberKey"));
+		
+		// retrieve subscriber attributes via system personalization string from the send context
+		SetVar("FirstName", Attribute.GetValue("FirstName"));
 
         if (request.SubscriberKey != "") {
 
