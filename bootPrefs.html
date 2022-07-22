@@ -62,6 +62,13 @@
         if (request.SubscriberKey == "") {
             SetVar("SubscriberKey", Request.GetFormField("EmailAddress"));
         }
+		
+		//retrieve values passed in the query string from email
+		SetVar("EmailAddress", Request.Parameter("EmailAddress"));
+        SetVar("FirstName", Request.Parameter("FirstName"));
+        SetVar("LastName", Request.Parameter("LastName"));
+        SetVar("ZipCode", Request.Parameter("ZipCode"));
+		SetVar("IsEngaged", Request.Parameter("IsEngaged"));
 
         // retrieve values from the form submission
         // form field names are case-sensitive
@@ -233,18 +240,6 @@
 		<h1 class="h3 mb-3 fw-normal">Please Sign Up Below</h1>
 
 		%%[ if @method == "GET" then ]%%
-			
-		%%[	
-			<!-- // Set AMPScript variables -->
-			SET @IsEngaged = "true"
-		
-			<!-- // Request parameters from email -->
-			SET @FirstName = RequestParameter("FirstName")
-			SET @LastName = RequestParameter("LastName")
-			SET @EmailAddress = RequestParameter("EmailAddress")
-			SET @ZipCode = RequestParameter("ZipCode")
-			SET @SubscriberKey = RequestParameter("SubscriberKey")
-		]%%
 		
 		<!-- State change for subscriptions checkbox -->
 		<script>
