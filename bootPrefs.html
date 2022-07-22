@@ -25,7 +25,11 @@
         SetVar("SubscriberKey", Attribute.GetValue("_SubscriberKey"));
 		
 		// retrieve subscriber attributes via system personalization string from the send context
+		SetVar("EmailAddress", Attribute.GetValue("EmailAddress"));
 		SetVar("FirstName", Attribute.GetValue("FirstName"));
+		SetVar("LastName", Attribute.GetValue("LastName"));
+		SetVar("ZipCode", Attribute.GetValue("ZipCode"));
+		
 
         if (request.SubscriberKey != "") {
 
