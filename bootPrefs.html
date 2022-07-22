@@ -34,7 +34,7 @@
         if (request.SubscriberKey != "") {
 
           // retrieve the row from the Master DE
-          var masterRows = Platform.Function.LookupRows(request.MasterDEKey,['SubscriberKey'], [request.SubscriberKey]);
+          var masterRows = Platform.Function.LookupRows(request.MasterDEKey,['SubscriberKey'], [request.SubscriberKey],['FirstName'], [request.FirstName]);
 
           if (debug) {
             Write("<br>masterRows.length: " + masterRows.length);
