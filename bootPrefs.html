@@ -34,7 +34,7 @@
         if (request.SubscriberKey != "") {
 
           // retrieve the row from the Master DE
-          var masterRows = Platform.Function.LookupRows(request.MasterDEKey,['SubscriberKey'], [request.SubscriberKey],['FirstName'], [request.FirstName]);
+          var masterRows = Platform.Function.LookupRows(request.MasterDEKey,['SubscriberKey'], [request.SubscriberKey]);
 
           if (debug) {
             Write("<br>masterRows.length: " + masterRows.length);
@@ -290,7 +290,7 @@
 		%%[ if @overallResult == "success" then ]%%
 
 		  <h1>Thanks</h1>
-		  We got your updates.
+		  We got your updates, %%=v(@FirstName)=%%
 
 		%%[ elseif @overallResult == "error" then ]%%
 
