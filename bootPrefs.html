@@ -162,6 +162,19 @@
 
 <!-- // Begin HTML page layout -->
 
+
+%%[
+
+var @SubscriberKey, @EmailAddress, @FirstName, @LastName, @ZipCode
+
+SET @SubscriberKey = AttributeValue("SubscriberKey")
+SET @EmailAddress = AttributeValue("EmailAddress")
+SET @FirstName = AttributeValue("FirstName")
+SET @LastName = AttributeValue("LastName")
+SET @ZipCode = AttributeValue("ZipCode")
+
+]%%
+
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -290,7 +303,7 @@
 		%%[ if @overallResult == "success" then ]%%
 
 		  <h1>Thanks</h1>
-		  We got your updates, %%=v(@FirstName)=%%
+		  We got your updates.
 
 		%%[ elseif @overallResult == "error" then ]%%
 
