@@ -235,23 +235,23 @@
 </head>
 	
 <body class="text-center">
+	
+	%%[
+
+		var @SubscriberKey, @EmailAddress, @FirstName, @LastName, @ZipCode
+
+		SET @SubscriberKey = AttributeValue("SubscriberKey")
+		SET @EmailAddress = AttributeValue("EmailAddress")
+		SET @FirstName = AttributeValue("FirstName")
+		SET @LastName = AttributeValue("LastName")
+		SET @ZipCode = AttributeValue("ZipCode")
+
+	]%%
 
 	<main class="form-signin">
 		<h1 class="h3 mb-3 fw-normal">Hey %%=v(@FirstName)=%%! Please Sign Up Below.</h1>
 
 		%%[ if @method == "GET" then ]%%
-		
-		%%[
-
-			var @SubscriberKey, @EmailAddress, @FirstName, @LastName, @ZipCode
-
-			SET @SubscriberKey = AttributeValue("SubscriberKey")
-			SET @EmailAddress = AttributeValue("EmailAddress")
-			SET @FirstName = AttributeValue("FirstName")
-			SET @LastName = AttributeValue("LastName")
-			SET @ZipCode = AttributeValue("ZipCode")
-
-		]%%
 		
 		<!-- State change for subscriptions checkbox -->
 		<script>
