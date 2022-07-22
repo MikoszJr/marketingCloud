@@ -162,19 +162,6 @@
 
 <!-- // Begin HTML page layout -->
 
-
-%%[
-
-var @SubscriberKey, @EmailAddress, @FirstName, @LastName, @ZipCode
-
-SET @SubscriberKey = AttributeValue("SubscriberKey")
-SET @EmailAddress = AttributeValue("EmailAddress")
-SET @FirstName = AttributeValue("FirstName")
-SET @LastName = AttributeValue("LastName")
-SET @ZipCode = AttributeValue("ZipCode")
-
-]%%
-
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -268,6 +255,8 @@ SET @ZipCode = AttributeValue("ZipCode")
 				});
 			});
     	</script>
+		
+		<p>Your subscriber key is: %%=v(@SubscriberKey)=%%</p>
 
 		<form id="prefCenter" action="%%=v(@urlThis)=%%" method="post" enctype="application/x-www-form-urlencoded">
 			<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
