@@ -237,7 +237,8 @@
 <body class="text-center">
 
 	<main class="form-signin">
-		<h1 class="h3 mb-3 fw-normal">Please Sign Up Below [V1]</h1>
+		<h1 class="h3 mb-3 fw-normal">Please Sign Up Below [V2]</h1>
+		<p>Your subscriber key is: %%=v(@SubscriberKey)=%%</p>
 
 		%%[ if @method == "GET" then ]%%
 		
@@ -255,8 +256,6 @@
 				});
 			});
     	</script>
-		
-		<p>Your subscriber key is: %%=v(@SubscriberKey)=%%</p>
 
 		<form id="prefCenter" action="%%=v(@urlThis)=%%" method="post" enctype="application/x-www-form-urlencoded">
 			<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
