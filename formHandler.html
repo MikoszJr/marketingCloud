@@ -6,15 +6,21 @@
 
     try {
       
-      </script>%%[
+     </script>
+
+	 %%[
       
         SET @EmailAddress = RequestParameter("EmailAddress")
-        InsertData("Emails", "EmailAddress", @EmailAddress)
+        SET @IsEngaged = RequestParameter("IsEngaged")
 
-		SET @IsEngaged = RequestParameter("IsEngaged")
-        InsertData("Emails", "IsEngaged", @IsEngaged)
+		SET @result = InsertData("Emails", "EmailAddress", @EmailAddress, "IsEngaged", @IsEngaged)
           
-      ]%%<script runat="server">
+      ]%%
+
+	%%=v(@result)=%%
+
+	
+	<script runat="server">
         
     } catch (err) {
 
