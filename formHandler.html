@@ -10,13 +10,14 @@
 
 	 %%[
 
-        SET @SubscriberKey = RequestParameter("SubscriberKey")
+		SET @EmailAddress = RequestParameter("EmailAddress")
+        
+		SET @SubscriberKey = RequestParameter("SubscriberKey")
 			IF Empty(@SubscriberKey)
 				THEN SET @SubscriberKey = @EmailAddress
 			ELSE 
 		ENDIF
 		
-		SET @EmailAddress = RequestParameter("EmailAddress")
 		SET @FirstName = RequestParameter("FirstName")
 		SET @LastName = RequestParameter("LastName")
 		SET @ZipCode = RequestParameter("ZipCode")
