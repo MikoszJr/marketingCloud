@@ -1,3 +1,15 @@
+%%[
+
+var @SubscriberKey, @EmailAddress, @FirstName, @LastName, @ZipCode
+
+SET @SubscriberKey = AttributeValue("SubscriberKey")
+SET @EmailAddress = AttributeValue("EmailAddress")
+SET @FirstName = AttributeValue("FirstName")
+SET @LastName = AttributeValue("LastName")
+SET @ZipCode = AttributeValue("ZipCode")
+
+]%%
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,7 +99,7 @@
 		});
 	</script>
 
-	<form id="prefCenter" action="https://pages.transamerica.com/formHandler" method="post" enctype="application/x-www-form-urlencoded">
+	<form id="prefCenter" action="https://pages.transamerica.com/parameter-handle" method="post" enctype="application/x-www-form-urlencoded">
 		%%[ IF EMPTY(@ok) AND EMPTY(@error) THEN ]%%
 		<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
 		<div class="form-floating">
