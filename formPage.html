@@ -1,12 +1,26 @@
 %%[
 
-var @SubscriberKey, @EmailAddress, @FirstName, @LastName, @ZipCode
+<!-- // Define master variables -->
+var @id, @SubscriberKey, @email, @IsBKG__C, @IsWFG__C, @IsTAN__C, @first_name, @last_name, @contact_state, @product_lines__C, @sub_product_lines__C, @audience_segment, @Insurance_Email_Pref__c, @License_Status, @SMU_OptIn, @SMU_EntrySource
 
-SET @SubscriberKey = AttributeValue("SubscriberKey")
-SET @EmailAddress = AttributeValue("EmailAddress")
-SET @FirstName = AttributeValue("FirstName")
-SET @LastName = AttributeValue("LastName")
-SET @ZipCode = AttributeValue("ZipCode")
+<!-- // Set master variables -->
+
+SET @id = AttributeValue("id")
+SET @SubscriberKey = AttributeValue("id")
+SET @email = AttributeValue("email")
+SET @IsBKG__C = AttributeValue("IsBKG__C")
+SET @IsWFG__C = AttributeValue("IsWFG__C")
+SET @IsTAN__C = AttributeValue("IsTAN__C")
+SET @first_name = AttributeValue("first_name")
+SET @last_name = AttributeValue("last_name")
+SET @contact_state = AttributeValue("contact_state")
+SET @product_lines__C = AttributeValue("product_lines__C")
+SET @sub_product_lines__C = AttributeValue("sub_product_lines__C")
+SET @audience_segment = AttributeValue("audience_segment")
+SET @Insurance_Email_Pref__c = AttributeValue("Insurance_Email_Pref__c")
+SET @License_Status = AttributeValue("License_Status")
+SET @SMU_OptIn = AttributeValue("SMU_OptIn")
+SET @SMU_EntrySource = AttributeValue("SMU_EntrySource")
 
 ]%%
 
@@ -84,7 +98,7 @@ SET @ZipCode = AttributeValue("ZipCode")
     ]%%
 <main>
 	
-	<!-- State change for subscriptions checkbox -->
+	<!-- State change for subscriptions checkbox
 	<script>
 		$(document).ready(function() {
 
@@ -98,35 +112,48 @@ SET @ZipCode = AttributeValue("ZipCode")
 			});
 		});
 	</script>
+	-->
 
 	<form id="prefCenter" action="https://pages.transamerica.com/parameter-handle" method="post" enctype="application/x-www-form-urlencoded">
 		%%[ IF EMPTY(@ok) AND EMPTY(@error) THEN ]%%
+		<input type="hidden" class="form-control" name="id" value="%%=v(@id)=%%">
 		<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
+		<input type="hidden" class="form-control" name="IsBKG__C" value="%%=v(@IsBKG__C)=%%">
+		<input type="hidden" class="form-control" name="IsWFG__C" value="%%=v(@IsWFG__C)=%%">
+		<input type="hidden" class="form-control" name="IsTAN__C" value="%%=v(@IsTAN__C)=%%">
+		<input type="hidden" class="form-control" name="contact_state" value="%%=v(@contact_state)=%%">
+		<input type="hidden" class="form-control" name="product_lines__C" value="%%=v(@product_lines__C)=%%">
+		<input type="hidden" class="form-control" name="sub_product_lines__C" value="%%=v(@sub_product_lines__C)=%%">
+		<input type="hidden" class="form-control" name="audience_segment" value="%%=v(@audience_segment)=%%">
+		<input type="hidden" class="form-control" name="Insurance_Email_Pref__c" value="%%=v(@Insurance_Email_Pref__c)=%%">
+		<input type="hidden" class="form-control" name="License_Status" value="%%=v(@License_Status)=%%">
+		<input type="hidden" class="form-control" name="SMU_OptIn" value="%%=v(@SMU_OptIn)=%%">
+		<input type="hidden" class="form-control" name="SMU_EntrySource" value="%%=v(@SMU_EntrySource)=%%">
+		
 		<div class="form-floating">
-			<input type="email" class="form-control" name="EmailAddress" value="%%=v(@EmailAddress)=%%">
+			<input type="email" class="form-control" name="email" value="%%=v(@email)=%%">
 			<label for="Email Address">Email Address</label>
 		</div>
 
 		<div class="form-floating">
-			<input type="text" class="form-control" name="FirstName" value="%%=v(@FirstName)=%%">
+			<input type="text" class="form-control" name="first_name" value="%%=v(@first_name)=%%">
 			<label for="First Name">First Name</label>
 		</div>
 
 		<div class="form-floating">
-			<input type="text" class="form-control" name="LastName" value="%%=v(@LastName)=%%">
+			<input type="text" class="form-control" name="last_name" value="%%=v(@last_name=%%">
 			<label for="Last Name">Last Name</label>
 		</div>
 
-		<div class="form-floating">
-			<input type="text" class="form-control" name="ZipCode" value="%%=v(@ZipCode)=%%">
-			<label for="ZipCode">Zip Code</label>
-		</div>
+		<!-- // Save for future opt-in requirements
 		<div class="checkbox mb-3">
 			<label>
 				<input type="checkbox" id="IsEngaged" name="IsEngaged" value="%%=v(@IsEngaged)=%%"> Sign Up
 			</label>
 		</div>
-		<button id="submit" class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+		-->
+		
+		<button id="submit" class="w-100 btn btn-lg btn-primary" type="submit">Sign Me Up</button>
 		%%[ ELSE ]%%
             %%[ IF NOT EMPTY(@ok) THEN ]%%
             <fieldset>
@@ -142,43 +169,11 @@ SET @ZipCode = AttributeValue("ZipCode")
             %%[ ENDIF ]%%
         %%[ ENDIF ]%%
 	</form>
-
-	
-	<!--
-    <form action="https://pages.transamerica.com/formHandler" method="post">
-        %%[ IF EMPTY(@ok) AND EMPTY(@error) THEN ]%%
-        <fieldset>
-            <legend>Form</legend>
-            <label for="EmailAddress">Email*:</label>
-            <input type="email" name="EmailAddress" id="email" placeholder="ex: john.smith@mail.com"
-                required>
-            <br><br>
-			<label for="IsEngaged">More information:</label>
-			<input type="checkbox" name="IsEngaged" id="checkbox" value="True" checked>
-            <br><br>
-            <button>Subscribe</button>
-        </fieldset>
-        %%[ ELSE ]%%
-            %%[ IF NOT EMPTY(@ok) THEN ]%%
-            <fieldset>
-                <legend>Message</legend>
-                Thank you for subscribing :)
-            </fieldset>
-            %%[ ENDIF ]%%
-            %%[ IF NOT EMPTY(@error) THEN ]%%
-            <fieldset>
-                <legend>Message</legend>
-                Something went wrong :(
-            </fieldset>
-            %%[ ENDIF ]%%
-        %%[ ENDIF ]%%
-    </form>
-	-->
 	
 </main>
     %%[ IF NOT EMPTY(@message) AND NOT EMPTY(@error) THEN ]%%
     <script>
-        console.error(`%%=v(@message)=%%`);
+        console.error('%%=v(@message)=%%');
     </script>
     %%[ ENDIF ]%%
 	
