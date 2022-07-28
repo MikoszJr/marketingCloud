@@ -113,6 +113,8 @@ SET @SMU_EntrySource = AttributeValue("SMU_EntrySource")
 		});
 	</script>
 	-->
+	
+	<h1>Form (v1)</h1>
 
 	<form id="prefCenter" action="https://pages.transamerica.com/parameter-handle" method="post" enctype="application/x-www-form-urlencoded">
 		%%[ IF EMPTY(@ok) AND EMPTY(@error) THEN ]%%
@@ -173,7 +175,7 @@ SET @SMU_EntrySource = AttributeValue("SMU_EntrySource")
 </main>
     %%[ IF NOT EMPTY(@message) AND NOT EMPTY(@error) THEN ]%%
     <script>
-        console.error('%%=v(@message)=%%');
+        console.error(`%%=v(@message)=%%`);
     </script>
     %%[ ENDIF ]%%
 	
