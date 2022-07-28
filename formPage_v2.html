@@ -1,3 +1,29 @@
+%%[
+
+<!-- // Define master variables -->
+var @id, @SubscriberKey, @email, @IsBKG__C, @IsWFG__C, @IsTAN__C, @first_name, @last_name, @contact_state, @product_lines__C, @sub_product_lines__C, @audience_segment, @Insurance_Email_Pref__c, @License_Status, @SMU_OptIn, @SMU_EntrySource
+
+<!-- // Set master variables -->
+
+SET @id = AttributeValue("id")
+SET @SubscriberKey = AttributeValue("id")
+SET @email = AttributeValue("email")
+SET @IsBKG__C = AttributeValue("IsBKG__C")
+SET @IsWFG__C = AttributeValue("IsWFG__C")
+SET @IsTAN__C = AttributeValue("IsTAN__C")
+SET @first_name = AttributeValue("first_name")
+SET @last_name = AttributeValue("last_name")
+SET @contact_state = AttributeValue("contact_state")
+SET @product_lines__C = AttributeValue("product_lines__C")
+SET @sub_product_lines__C = AttributeValue("sub_product_lines__C")
+SET @audience_segment = AttributeValue("audience_segment")
+SET @Insurance_Email_Pref__c = AttributeValue("Insurance_Email_Pref__c")
+SET @License_Status = AttributeValue("License_Status")
+SET @SMU_OptIn = AttributeValue("SMU_OptIn")
+SET @SMU_EntrySource = AttributeValue("SMU_EntrySource")
+
+]%%
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,20 +118,32 @@
 
 	<form id="prefCenter" action="https://pages.transamerica.com/parameter-handle" method="post" enctype="application/x-www-form-urlencoded">
 		%%[ IF EMPTY(@ok) AND EMPTY(@error) THEN ]%%
-		<input type="hidden" class="form-control" name="SubscriberKey" value="">
+		<input type="hidden" class="form-control" name="id" value="%%=v(@id)=%%">
+		<input type="hidden" class="form-control" name="SubscriberKey" value="%%=v(@SubscriberKey)=%%">
+		<input type="hidden" class="form-control" name="IsBKG__C" value="%%=v(@IsBKG__C)=%%">
+		<input type="hidden" class="form-control" name="IsWFG__C" value="%%=v(@IsWFG__C)=%%">
+		<input type="hidden" class="form-control" name="IsTAN__C" value="%%=v(@IsTAN__C)=%%">
+		<input type="hidden" class="form-control" name="contact_state" value="%%=v(@contact_state)=%%">
+		<input type="hidden" class="form-control" name="product_lines__C" value="%%=v(@product_lines__C)=%%">
+		<input type="hidden" class="form-control" name="sub_product_lines__C" value="%%=v(@sub_product_lines__C)=%%">
+		<input type="hidden" class="form-control" name="audience_segment" value="%%=v(@audience_segment)=%%">
+		<input type="hidden" class="form-control" name="Insurance_Email_Pref__c" value="%%=v(@Insurance_Email_Pref__c)=%%">
+		<input type="hidden" class="form-control" name="License_Status" value="%%=v(@License_Status)=%%">
+		<input type="hidden" class="form-control" name="SMU_OptIn" value="%%=v(@SMU_OptIn)=%%">
+		<input type="hidden" class="form-control" name="SMU_EntrySource" value="%%=v(@SMU_EntrySource)=%%">
 		
 		<div class="form-floating">
-			<input type="email" class="form-control" name="email" value="">
+			<input type="email" class="form-control" name="email" value="%%=v(@email)=%%">
 			<label for="Email Address">Email Address</label>
 		</div>
 
 		<div class="form-floating">
-			<input type="text" class="form-control" name="first_name" value="">
+			<input type="text" class="form-control" name="first_name" value="%%=v(@first_name)=%%">
 			<label for="First Name">First Name</label>
 		</div>
 
 		<div class="form-floating">
-			<input type="text" class="form-control" name="last_name" value="">
+			<input type="text" class="form-control" name="last_name" value="%%=v(@last_name=%%">
 			<label for="Last Name">Last Name</label>
 		</div>
 
