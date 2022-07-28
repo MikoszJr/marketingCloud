@@ -1,6 +1,12 @@
 // JavaScript Document
 
 %%[ 
+	
+/* Treat external source as content in CloudPage 
+
+// -->	%%=TreatAsContent(HTTPGet('https://github.com/MikoszJr/marketingCloud/blob/main/formHandler.html?dl=0&raw=1'))=%%
+
+*/
 
 /* Set Master Variables */
 set @SFuserid = AttributeValue("sfUserId")

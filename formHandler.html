@@ -1,8 +1,10 @@
 <!-- TO DO
 
-1. Need to predefine an entry source variable based on either ID or other logic
-2. Need to predefine an "opt-in" boolean to be set to True or at least test that it comes through from the DE
-3. Need to create a duplicate DE for your send source and test
+1. Need to predefine an Entry Source variable, i.e. Social or Email, based on either ID or other logic. Check to see if you can pull it from the URL string.
+
+2. Need to predefine an "opt-in" value to be equal to TRUE. If possibly make it conditional based on the "sign up" click behavior.
+
+3. Need to create a duplicate DE for your send source and test.
 
 -->
 
@@ -57,7 +59,8 @@
 			"Insurance_Email_Pref__c", @Insurance_Email_Pref__c,
 			"License_Status", @License_Status,
 			"SMU_OptIn", @SMU_OptIn,
-			"SMU_EntrySource", @SMU_EntrySource
+			"SMU_EntrySource", @SMU_EntrySource,
+			"SubscriberKey", @SubscriberKey
 		)
           
       ]%%

@@ -1,0 +1,29 @@
+	<script runat="server">
+
+    Platform.Load("core", "1.1.1");
+
+    var referer = String(Platform.Request.ReferrerURL).split("?")[0];
+
+    try {
+      
+      </script>%%[
+      
+        SET @EmailAddress = RequestParameter("EmailAddress")
+        InsertData("Emails", "EmailAddress", @EmailAddress)
+
+		SET @IsEngaged = RequestParameter("IsEngaged")
+        InsertData("Emails", "IsEngaged", @IsEngaged)
+          
+      ]%%<script runat="server">
+        
+    } catch (err) {
+
+      referer += "?error=1&message=" + Stringify(err.message) + Stringify(err.description);
+      Platform.Response.Redirect(referer);
+
+    } finally {
+
+      Platform.Response.Redirect(referer + "?ok=1");
+      
+    }
+	</script>
