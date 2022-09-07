@@ -1,0 +1,80 @@
+<script runat="server">
+
+    Platform.Load("core", "1.1.1");
+
+    var referer = String(Platform.Request.ReferrerURL).split("?")[0];
+
+    try {
+      
+     </script>
+
+  %%[
+
+  /* Request parameters from form */
+  SET @id = RequestParameter("id")
+  SET @email = RequestParameter("email")
+  SET @IsBKG__C = RequestParameter("IsBKG__C")
+  SET @IsWFG__C = RequestParameter("IsWFG__C")
+  SET @IsTAN__C = RequestParameter("IsTAN__C")
+  SET @first_name = RequestParameter("first_name")
+  SET @last_name = RequestParameter("last_name")
+  SET @contact_state = RequestParameter("contact_state")
+  SET @product_lines__C = RequestParameter("product_lines__C")
+  SET @sub_product_lines__C = RequestParameter("sub_product_lines__C")
+  SET @audience_segment = RequestParameter("audience_segment")
+  SET @Insurance_Email_Pref__c = RequestParameter("Insurance_Email_Pref__c")
+  SET @License_Status = RequestParameter("License_Status")
+  SET @SMU_OptIn = RequestParameter("SMU_OptIn")
+  
+  /* Set value for Entry Source */
+  SET @SMU_EntrySource = RequestParameter("SMU_EntrySource")
+   IF Empty(@SMU_EntrySource)
+     THEN SET @SMU_EntrySource = "Social"
+    ELSE 
+   ENDIF
+  
+  /* Set value for Subscriber Key */
+  SET @SubscriberKey = RequestParameter("SubscriberKey")
+   IF Empty(@SubscriberKey)
+     THEN SET @SubscriberKey = @email
+    ELSE 
+   ENDIF
+
+  /* Insert parameters into the data extension */
+  SET @result = InsertData(
+   "SocialMediaUniversity_EntryDE", 
+   "id", @id,
+   "email", @email,
+   "IsBKG__C", @IsBKG__C,
+   "IsWFG__C", @IsWFG__C,
+   "IsTAN__C", @IsTAN__C,
+   "first_name", @first_name,
+   "last_name", @last_name,
+   "contact_state", @contact_state,
+   "product_lines__C", @roduct_lines__C,
+   "sub_product_lines__C", @sub_product_lines__C,
+   "audience_segment", @audience_segment,
+   "Insurance_Email_Pref__c", @Insurance_Email_Pref__c,
+   "License_Status", @License_Status,
+   "SMU_OptIn", @SMU_OptIn,
+   "SMU_EntrySource", @SMU_EntrySource,
+   "SubscriberKey", @SubscriberKey
+  )
+          
+      ]%%
+
+ %%=v(@result)=%%
+ 
+ <script runat="server">
+        
+    } catch (err) {
+
+      referer += "?error=1&message=" + Stringify(err.message) + Stringify(err.description);
+      Platform.Response.Redirect(referer);
+
+    } finally {
+
+      Platform.Response.Redirect(referer + "?ok=1");
+      
+    }
+ </script>
